@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Monitoramento Clínico</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>Painel de Monitoramento Clínico</h1>
+    <p>Plataforma Inteligente de Monitoramento da Recuperação Pulmonar - MVP</p>
+<a href="/reports" class="reports-btn">📊 Reports</a>
+
+</header>
+
+<main>
+
+<h2>Estado atual do paciente</h2>
+
+<div class="cards">
+
+<div class="card normal">
+<h3>SpO₂</h3>
+<p>{{ measurement.oxygen_saturation }}%</p>
+</div>
+
+<div class="card stable">
+<h3>Frequência Cardíaca</h3>
+<p>{{ measurement.heart_rate }} bpm</p>
+</div>
+
+<div class="card stable">
+<h3>Temperatura Corporal</h3>
+<p>{{ measurement.temperature }}°C</p>
+</div>
+
+<div class="card normal">
+<h3>Frequência Respiratória</h3>
+<p>{{ measurement.respiratory_rate }} rpm</p>
+</div>
+<div class="card stable">
+    <h3>Movement</h3>
+    <p>{{ measurement.movement or "Rest" }}</p>
+</div>
+</div>
+<section class="environment">
+    <h2>Condições Ambientais</h2>
+
+    <div class="cards">
+        <div class="card stable">
+            <h3>Temperatura Ambiente</h3>
+            <p>{{ measurement.ambient_temperature }}°C</p>
+        </div>
+
+        <div class="card stable">
+            <h3>Umidade Relativa</h3>
+            <p>{{ measurement.humidity }}%</p>
+        </div>
+    </div>
+</section>
+
+
+<section class="alerts">
+    <h2>Alertas clínicos</h2>
+
+    <div class="alert success">
+        Nenhum alerta crítico no momento.
+    </div>
+</section>
+</main>
+
+</body>
+</html>

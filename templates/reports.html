@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 90%;
+        margin: 30px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 25px;
+    }
+    header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 16px;
+    opacity: 0.9;
+}
+.report-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #eef6ff;
+    border: 1px solid #d6e9ff;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 14px;
+    font-weight: 600;
+}   
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #d6e9ff;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.chart-container {
+    background: white;
+    margin-bottom: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.summary-card {
+    background: white;
+    border-top: 5px solid #3498db;
+    padding: 28px 20px;
+min-height: 120px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+cursor: pointer;
+}
+
+.summary-card h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 14px;
+}
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+
+.summary-card p {
+    margin-top: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #3498db;
+}
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+    th {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 14px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+   td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+
+    tr:hover {
+    background-color: #eaf4ff;
+    transition: 0.3s;
+}
+
+    .back-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+margin-bottom: 20px;
+}
+.status-normal {
+    color: #198754;
+    font-weight: bold;
+}
+
+.status-warning {
+    color: #fd7e14;
+    font-weight: bold;
+}
+
+.status-critical {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+</style>
+
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Relatórios Clínicos</h1>
+        <p>Histórico de medições do paciente</p>
+    <a href="/" class="back-link">← Voltar ao Dashboard</a>
+    </header>
+    
+    <main class="container">
+
+        <h2>Histórico de Medições</h2>
+    <div class="report-toolbar">
+    <span>Painel de indicadores clínicos</span>
+
+    <div>
+       {% if measurements|length > 0 %}
+<span>Última atualização: medição #{{ measurements[0].id }}</span>
+{% else %}
+<span>Última atualização: nenhuma medição registrada</span>
+{% endif %}
+        <a href="/export/csv" class="back-link" style="margin-left: 15px;">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+   <a href="/export/pdf" class="back-link" style="margin-left: 15px;">
+    <i class="fa-solid fa-file-pdf"></i> Exportar PDF
+</a>
+    </div>
+
+
+
+</div>
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Pesquisar por ID, SpO₂, FC, temperatura, FR ou movimento...">
+</div>
+       
+
+<div class="summary-cards">
+    <div class="summary-card">
+        <h3><i class="fa-solid fa-chart-line"></i> Total de Medições</h3>
+
+        <p>{{ measurements|length }}</p>
+    </div>
+
+    <div class="summary-card">
+        <h3><i class="fa-solid fa-lungs"></i> Última SpO₂</h3>
+       <p>{% if measurements|length > 0 %}{{ measurements[0].oxygen_saturation }}{% else %}0{% endif %}%</p>
+    </div>
+
+    <div class="summary-card">
+       <h3><i class="fa-solid fa-heart-pulse"></i> Última FC</h3>
+        <p>{% if measurements|length > 0 %}{{ measurements[0].heart_rate }}{% else %}0{% endif %} bpm</p>
+    </div>
+
+    <div class="summary-card">
+        <h3><i class="fa-solid fa-temperature-half"></i> Última Temp.</h3>
+        <p>{% if measurements|length > 0 %}{{ measurements[0].temperature }}{% else %}0{% endif %}°C</p>
+    </div>
+
+    <div class="summary-card">
+        <h3><i class="fa-solid fa-wind"></i> Última FR</h3>
+        <p>{% if measurements|length > 0 %}{{ measurements[0].respiratory_rate }}{% else %}0{% endif %} rpm</p>
+    </div>
+</div>
+<div class="chart-container">
+    <canvas id="historyChart"></canvas>
+</div>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>SpO₂</th>
+        <th>FC</th>
+        <th>Temp.</th>
+        <th>FR</th>
+        <th>Movimento</th>
+    </tr>
+
+    {% for measurement in measurements %}
+    <tr>
+        <td>{{ measurement.id }}</td>
+        <td>{{ measurement.oxygen_saturation }}</td>
+        <td>
+    {% if measurement.oxygen_saturation >= 95 %}
+        <span class="status-normal">{{ measurement.oxygen_saturation }}</span>
+    {% elif measurement.oxygen_saturation >= 90 %}
+        <span class="status-warning">{{ measurement.oxygen_saturation }}</span>
+    {% else %}
+        <span class="status-critical">{{ measurement.oxygen_saturation }}</span>
+    {% endif %}
+</td>
+<td>{{ measurement.heart_rate }}</td>        
+<td>{{ measurement.temperature }}</td>
+        <td>{{ measurement.respiratory_rate }}</td>
+        <td>{{ measurement.movement }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+
+        
+
+        
+
+        <a href="/" class="back-link">← Voltar ao Dashboard</a>
+
+    </main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ url_for('static', filename='reports_chart.js') }}"></script>
+
+
+
+</body>
+</html>
