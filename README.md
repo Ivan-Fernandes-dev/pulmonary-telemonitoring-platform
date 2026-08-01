@@ -1,4 +1,4 @@
-# Plataforma Inteligente de Telemonitoramento da Recuperação Pulmonar
+⁹# Plataforma Inteligente de Telemonitoramento da Recuperação Pulmonar
 
 ## Smart Pulmonary Recovery Telemonitoring Platform
 
