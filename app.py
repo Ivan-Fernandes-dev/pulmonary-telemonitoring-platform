@@ -3,7 +3,28 @@ import sqlite3
 import io
 from reportlab.pdfgen import canvas
 app = Flask(__name__)
+def init_db():
+    conn = sqlite3.connect("pulmonary_monitoring.db")
+    cursor = conn.cursor()
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS measurements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            patient_id INTEGER,
+            oxygen_saturation REAL,
+            heart_rate REAL,
+            temperature REAL,
+            respiratory_rate REAL,
+            movement TEXT,
+            ambient_temperature REAL,
+            humidity REAL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+init_db()
 def get_latest_measurement():
     conn = sqlite3.connect("pulmonary_monitoring.db")
     conn.row_factory = sqlite3.Row
