@@ -17,9 +17,22 @@ def init_db():
             respiratory_rate REAL,
             movement TEXT,
             ambient_temperature REAL,
-            humidity REAL
+            humidity REAL,
+            measured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+
+    # Garante compatibilidade caso a tabela já exista sem measured_at
+    cursor.execute("PRAGMA table_info(measurements)")
+    columns = [column[1] for column in cursor.fetchall()]
+
+    if "measured_at" not in columns:
+        cursor.execute("ALTER TABLE measurements ADD COLUMN measured_at TEXT")
+        cursor.execute("""
+            UPDATE measurements
+            SET measured_at = CURRENT_TIMESTAMP
+            WHERE measured_at IS NULL
+        """)
 
     conn.commit()
     conn.close()
