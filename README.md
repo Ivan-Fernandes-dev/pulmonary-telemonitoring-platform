@@ -1,5 +1,7 @@
 ⁹# Plataforma Inteligente de Telemonitoramento da Recuperação Pulmonar
 
+alteração Kelvin
+
 ## Smart Pulmonary Recovery Telemonitoring Platform
 
 ## Descrição
